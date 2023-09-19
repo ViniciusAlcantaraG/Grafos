@@ -114,8 +114,8 @@ class Matriz_Grafo(Grafo):
     
     def diametro(self):
         distancias = []
-        for i in range(self.n):
-            for j in range(self.n):
+        for i in range(1, self.n + 1):
+            for j in range(1, self.n + 1):
                 if i!=j:
                     distancias.append(self.distancia(i,j))
         return max(distancias)
@@ -148,8 +148,89 @@ class Matriz_Grafo(Grafo):
 class Lista_Grafo(Grafo):
     def __init__(self, n, links):
         super().__init__(n, links)
+        self.lista=[[] for i in range(self.n)]
+        for i in range(len(self.links)):
+            [a,b] = self.links[i]
+            self.lista[a-1].append(b)
+            self.lista[b-1].append(a)
+        for i in range(len(self.lista)):
+            self.lista[i].sort()
+    def __repr__(self):
+        return str(self.lista)
+    
+    def BFS(self, raiz):
+        nivel = [0 for i in range(self.n)]
+        pai = [0 for i in range(self.n)]
+        self.vertices_BFS = [0 for i in range(self.n)]
+        fila = []
+        self.vertices_BFS[raiz-1] = 1
+        fila.append(raiz-1)
+        while fila != []:
+            v = fila[0]
+            fila.pop(0)
+            for i in self.lista[v]:
+                if self.vertices_BFS[i-1] == 0:
+                    pai[i-1] = v + 1
+                    nivel[i-1] = nivel[v] + 1
+                    self.vertices_BFS[i-1] = 1
+                    fila.append(i-1)
+        return pai, nivel
+    
+    def DFS(self, raiz):
+        nivel = [0 for i in range(self.n)]
+        pai = [0 for i in range(self.n)]
+        vertices = [0 for i in range(self.n)]
+        pilha = Stack()
+        pilha.push(raiz-1)
+        while pilha.isEmpty() == False:
+            u = pilha.pop()
+            if vertices[u] == 0:
+                vertices[u] = 1
+                for i in self.lista[u]:
+                    pilha.push(i-1)
+                    if vertices[i-1] == 0:
+                        pai[i-1] = u + 1
+                        nivel[i-1] = nivel[u] + 1
+        return pai, nivel
+    
+    def distancia(self, u ,v):
+        return self.BFS(u)[1][v-1]
+    
+    def diametro(self):
+        distancias = []
+        for i in range(1, self.n + 1):
+            for j in range(1, self.n + 1):
+                if j <=i:
+                    pass
+                else:
+                    distancias.append(self.distancia(i,j))
+        return max(distancias)
+    
+    def componentes_conexos(self):
+        tamanho = []
+        Ver_BFS = [0 for i in range(self.n)]
+        lista_vert = []
+        self.BFS(1)
+        tamanho.append(self.vertices_BFS.count(1))
+        for i in range(self.n):
+            if self.vertices_BFS[i] == 1:
+                lista_vert.append(i+1)
+                Ver_BFS[i] = 1
+        while len(lista_vert) != self.n:
+            if Ver_BFS.index(0)+1 not in lista_vert:
+                self.BFS(Ver_BFS.index(0)+1)
+                tamanho.append(self.vertices_BFS.count(1))
+                for i in range(self.n):
+                    if self.vertices_BFS[i] == 1:
+                        lista_vert.append(i+1)
+                        Ver_BFS[i] = 1
+        for i in range(len(tamanho)):
+            if i != len(tamanho) - 1:
+                lista_vert[i:tamanho[i]] = [lista_vert[i:tamanho[i]]]
+            else:
+                lista_vert[i:] = [lista_vert[i:]]
+        return tamanho, lista_vert, len(tamanho)
 
 
-
-cachorro = Matriz_Grafo(5, [[1,2],[2,3],[1,3],[4,5]])
-print(cachorro.componentes_conexos())
+cachorro = Lista_Grafo(5, [[1,2],[2,5],[5,3],[4,5],[1,5]])
+print(cachorro)
