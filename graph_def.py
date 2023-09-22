@@ -273,3 +273,9 @@ g.write("Número de vértices: " + str(number_vertices) + "\n" +
         "Tamanho de cada componente: " + str(tamanho_de_cada_componente) + "\n" + 
         "Lista de vértices pertencentes à componente: " + str(vertices_conexos))
 tempos = []
+for i in range(100):
+    start_time = time()
+    cachorro.BFS(random.randint(number_vertices))
+    time_elapsed = time() - start_time
+    tempos.append(time_elapsed)
+print(tempos)
