@@ -31,7 +31,7 @@ Grafo 6
 
 Grafo 1
 
-
+38.13341949939728
 
 Tempos de DFS:
 Grafo 1
