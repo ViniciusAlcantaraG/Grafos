@@ -27,6 +27,12 @@ Grafo 5
 Grafo 6
 
 
+(Matriz de adjacência)
+
+Grafo 1
+
+
+
 Tempos de DFS:
 Grafo 1
 
