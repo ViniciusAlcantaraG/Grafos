@@ -3,6 +3,7 @@ Trabalho Prático 1
 Implementação de busca e representação de grafos em alguma linguagem
 
 Tempos de BFS:
+(Vetor de adjacência)
 Grafo 1
 
 0.11298655986785888
@@ -20,6 +21,8 @@ Grafo 4
 8.207013027668
 
 Grafo 5
+
+1066.3870725631714
 
 Grafo 6
 
