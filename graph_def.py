@@ -3,8 +3,9 @@ import functools
 import statistics 
 from time import time
 import random
+from collections import deque
 
-with open("grafo_1.txt") as f:
+with open("grafo_3.txt") as f:
     mylist = f.read().splitlines() 
 links = []
 for i in range(1, len(mylist)):
@@ -81,43 +82,41 @@ class Matriz_Grafo(Grafo):
     def __init__(self, n, links):
         super().__init__(n, links)
         self.matriz = np.zeros((self.n, self.n), dtype = int) 
-        for i in range(len(links)):
-            a = links[i][0] - 1
-            b = links[i][1] - 1
-            self.matriz[a][b] = self.matriz[b][a] = 1
-            
+        links = np.array(links) - 1  # Adjust indices to start from 0
+
+        # Set edges in bulk using advanced indexing
+        self.matriz[links[:, 0], links[:, 1]] = 1
+        self.matriz[links[:, 1], links[:, 0]] = 1
     def __repr__(self):
         return str(self.matriz)
     
     def BFS(self, raiz):
-        nivel = np.zeros(self.n, dtype = int)
-        pai = np.zeros(self.n, dtype = int)
-        self.verticesBFS = np.zeros(self.n, dtype = int)
-        fila = np.array([raiz-1])
-        self.verticesBFS[raiz - 1] = 1
-        while len(fila) != 0:
-            v = fila[0]
-            fila = fila[1:]
-            for i in range(len(self.matriz[v])):
-                if self.matriz[v][i] == 1:
-                    if self.verticesBFS[i] == 0:
-                        pai[i] = v + 1
-                        nivel[i] = nivel[v] + 1
-                        self.verticesBFS[i] = 1
-                        fila = np.concatenate((fila, np.array([i])))
+        nivel = [0] * self.n
+        pai = [0] * self.n
+        self.verticesBFS = set()
+        fila = deque([raiz-1])
+        self.verticesBFS.add(raiz-1)
+        while fila:
+            v = fila.popleft()
+            for i in range(self.n):
+                if self.matriz[v][i] == 1 and i not in self.verticesBFS:
+                    pai[i] = v + 1
+                    nivel[i] = nivel[v] + 1
+                    self.verticesBFS.add(i)
+                    fila.append(i)
         return pai, nivel
     
     def DFS(self, raiz):
-        nivel = np.zeros(self.n, dtype = int)
-        pai = np.zeros(self.n, dtype = int)
-        vertices = np.zeros(self.n, dtype = int)
+        nivel = [0] * self.n
+        pai = [0] * self.n
+        vertices = [0] * self.n
         pilha = Stack()
         pilha.push(raiz-1)
-        while pilha.isEmpty() == False:
+        while not pilha.isEmpty:
             u = pilha.pop()
             if vertices[u] == 0:
                 vertices[u] = 1
-                for i in range(len(self.matriz[u])):
+                for i in range(self.n):
                     if self.matriz[u][i] == 1:
                         pilha.push(i)
                         if vertices[i] == 0:
@@ -176,22 +175,22 @@ class Lista_Grafo(Grafo):
         return str(self.lista)
     
     def BFS(self, raiz):
-        nivel = np.zeros(self.n, dtype = int)
-        pai = np.zeros(self.n, dtype = int)
-        self.vertices_BFS = np.zeros(self.n, dtype = int)
-        fila = np.array([raiz-1])
-        self.vertices_BFS[raiz-1] = 1
-        while len(fila) != 0:
-            v = fila[0]
-            fila = fila[1:]
+        nivel = [0] * self.n
+        pai = [0] * self.n
+        self.vertices_BFS = set()
+        fila = deque([raiz - 1])
+        self.vertices_BFS.add(raiz - 1)
+
+        while fila:
+            v = fila.popleft()
             for i in self.lista[v]:
-                if self.vertices_BFS[i-1] == 0:
-                    pai[i-1] = v + 1
-                    nivel[i-1] = nivel[v] + 1
-                    self.vertices_BFS[i-1] = 1
-                    fila = np.concatenate((fila, np.array([i-1])))
+                if i - 1 not in self.vertices_BFS:
+                    pai[i - 1] = v + 1
+                    nivel[i - 1] = nivel[v] + 1
+                    self.vertices_BFS.add(i - 1)
+                    fila.append(i - 1)
+
         return pai, nivel
-    
     def DFS(self, raiz):
         nivel = np.zeros(self.n, dtype = int)
         pai = np.zeros(self.n, dtype = int)
@@ -249,13 +248,15 @@ class Lista_Grafo(Grafo):
         return tamanho, lista_vert, len(tamanho)
 
 
-cachorrinho = Lista_Grafo(5, [[1,2], [2,3], [1,3], [4,5]])
-print(cachorrinho.componentes_conexos())
-cachorro = Lista_Grafo(number_vertices, links)
-a=[[1,2,3],[2],[1,2]]
-b = np.array(cachorro.lista)
-b = np.array(list(map(len, b)))
-#media = functools.reduce(lambda a, c: a+c, b)//10000
+#cachorrinho = Lista_Grafo(5, [[1,2], [2,3], [1,3], [4,5]])
+#print(cachorrinho.componentes_conexos())
+cachorro = Matriz_Grafo(number_vertices, links)
+#print(cachorro.BFS(1))
+
+#a=[[1,2,3],[2],[1,2]]
+#b = np.array(cachorro.lista)
+#b = np.array(list(map(len, b)))
+"""media = functools.reduce(lambda a, c: a+c, b)//10000
 media = statistics.mean(b)
 mediana = statistics.median(np.sort(b))
 tamanho = cachorro.componentes_conexos()[2]
@@ -271,11 +272,12 @@ g.write("Número de vértices: " + str(number_vertices) + "\n" +
         "Mediana de grau: " + str(int(mediana)) + "\n" +
         "Número de componentes conexas: " + str(tamanho) + "\n" +
         "Tamanho de cada componente: " + str(tamanho_de_cada_componente) + "\n" + 
-        "Lista de vértices pertencentes à componente: " + str(vertices_conexos))
+        "Lista de vértices pertencentes à componente: " + str(vertices_conexos))"""
 tempos = []
 for i in range(100):
     start_time = time()
-    cachorro.BFS(random.randint(number_vertices))
+    cachorro.DFS(random.randint(1, number_vertices))
     time_elapsed = time() - start_time
     tempos.append(time_elapsed)
 print(tempos)
+print(sum(tempos)/100)
