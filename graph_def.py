@@ -4,8 +4,9 @@ import statistics
 from time import time
 import random
 from collections import deque
+import gc
 
-with open("grafo_3.txt") as f:
+with open("grafo_5.txt") as f:
     mylist = f.read().splitlines() 
 links = []
 for i in range(1, len(mylist)):
@@ -82,11 +83,11 @@ class Matriz_Grafo(Grafo):
     def __init__(self, n, links):
         super().__init__(n, links)
         self.matriz = np.zeros((self.n, self.n), dtype = int) 
-        links = np.array(links) - 1  # Adjust indices to start from 0
-
-        # Set edges in bulk using advanced indexing
-        self.matriz[links[:, 0], links[:, 1]] = 1
-        self.matriz[links[:, 1], links[:, 0]] = 1
+        for a, b in links:
+            a -= 1
+            b -= 1
+            self.matriz[a][b] = 1
+        self.matriz = np.triu(self.matriz)
     def __repr__(self):
         return str(self.matriz)
     
@@ -226,19 +227,17 @@ class Lista_Grafo(Grafo):
         Ver_BFS = [0 for i in range(self.n)]
         lista_vert = np.array([], dtype = int)
         self.BFS(1)
-        tamanho = np.concatenate((tamanho, np.array([np.count_nonzero(self.vertices_BFS == 1)])))
-        for i in range(self.n):
-            if self.vertices_BFS[i] == 1:
-                lista_vert = np.concatenate((lista_vert,np.array([i+1])))
-                Ver_BFS[i] = 1
+        tamanho = np.concatenate((tamanho, np.array([len(self.vertices_BFS)])))
+        for i in self.vertices_BFS:
+            lista_vert = np.concatenate((lista_vert,np.array([i+1])))
+            Ver_BFS[i] = 1
         while len(lista_vert) != self.n:
             if Ver_BFS.index(0)+1 not in lista_vert:
                 self.BFS(Ver_BFS.index(0)+1)
-                tamanho = np.concatenate((tamanho, np.array([np.count_nonzero(self.vertices_BFS == 1)])))
-                for i in range(self.n):
-                    if self.vertices_BFS[i] == 1:
-                        lista_vert = np.concatenate((lista_vert, np.array([i+1])))
-                        Ver_BFS[i] = 1
+                tamanho = np.concatenate((tamanho, np.array([len(self.vertices_BFS)])))
+                for i in self.vertices_BFS:
+                    lista_vert = np.concatenate((lista_vert, np.array([i+1])))
+                    Ver_BFS[i] = 1
         lista_vert = list(lista_vert)
         for i in range(len(tamanho)):
             if i != len(tamanho) - 1:
@@ -248,9 +247,9 @@ class Lista_Grafo(Grafo):
         return tamanho, lista_vert, len(tamanho)
 
 
-#cachorrinho = Lista_Grafo(5, [[1,2], [2,3], [1,3], [4,5]])
+cachorrinho = Lista_Grafo(5, [[1,2], [2,3], [1,3], [4,5]])
 #print(cachorrinho.componentes_conexos())
-cachorro = Matriz_Grafo(number_vertices, links)
+cachorro = Lista_Grafo(number_vertices, links)
 #print(cachorro.BFS(1))
 
 #a=[[1,2,3],[2],[1,2]]
@@ -274,10 +273,14 @@ g.write("Número de vértices: " + str(number_vertices) + "\n" +
         "Tamanho de cada componente: " + str(tamanho_de_cada_componente) + "\n" + 
         "Lista de vértices pertencentes à componente: " + str(vertices_conexos))"""
 tempos = []
-for i in range(100):
+"""for i in range(100):
     start_time = time()
     cachorro.DFS(random.randint(1, number_vertices))
     time_elapsed = time() - start_time
     tempos.append(time_elapsed)
 print(tempos)
-print(sum(tempos)/100)
+print(sum(tempos)/100)"""
+
+a = cachorro.componentes_conexos()
+#print(cachorro.componentes_conexos()[2])
+print(a[0], a[2])
