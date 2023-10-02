@@ -6,7 +6,7 @@ import random
 from collections import deque
 import gc
 
-with open("grafo_5.txt") as f:
+with open("grafo_3.txt") as f:
     mylist = f.read().splitlines() 
 links = []
 for i in range(1, len(mylist)):
@@ -213,14 +213,22 @@ class Lista_Grafo(Grafo):
         return self.BFS(u)[1][v-1]
     
     def diametro(self):
-        distancias = np.array([])
+        diam = 0
         for i in range(1, self.n + 1):
-            for j in range(1, self.n + 1):
-                if j <=i:
-                    pass
-                else:
-                    distancias = np.concatenate((distancias, np.array([self.distancia(i,j)])))
-        return int(distancias.max())
+            níveis = self.BFS(i)[1]
+            nível_max = max(níveis)
+            diam = max(diam, nível_max)
+        return diam
+    def diametro_aprox(self):
+        distancias_max = []
+        num_amostras = 1000
+        diam = 0
+        for j in range(num_amostras):
+            vertices = random.randint(1, self.n)
+            níveis = self.BFS(vertices)[1]
+            nível_max = max(níveis)
+            diam = max(diam, nível_max)
+        return diam
     
     def componentes_conexos(self):
         tamanho = np.array([], dtype = int)
@@ -247,7 +255,7 @@ class Lista_Grafo(Grafo):
         return tamanho, lista_vert, len(tamanho)
 
 
-cachorrinho = Lista_Grafo(5, [[1,2], [2,3], [1,3], [4,5]])
+cachorrinho = Lista_Grafo(5, [[1,2], [2,5], [5,3], [4,5], [1,5]])
 #print(cachorrinho.componentes_conexos())
 cachorro = Lista_Grafo(number_vertices, links)
 #print(cachorro.BFS(1))
@@ -281,6 +289,6 @@ tempos = []
 print(tempos)
 print(sum(tempos)/100)"""
 
-a = cachorro.componentes_conexos()
+a = cachorro.diametro_aprox()
 #print(cachorro.componentes_conexos()[2])
-print(a[0], a[2])
+print(a)
