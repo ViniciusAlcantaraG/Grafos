@@ -27,8 +27,8 @@ class Matriz_Grafo(Grafo):
         for a, b in links:
             a -= 1
             b -= 1
-            self.matriz[a][b] = 1
-        self.matriz = np.triu(self.matriz)
+            self.matriz[a][b] = self.matriz[b][a] = 1
+            
     def __repr__(self):
         return str(self.matriz)
     
@@ -119,17 +119,17 @@ class Lista_Grafo(Grafo):
     def BFS(self, raiz):
         nivel = [0] * self.n
         pai = [0] * self.n
-        self.vertices_BFS = set()
+        self.vertices_BFS = [0] * self.n
         fila = deque([raiz - 1])
-        self.vertices_BFS.add(raiz - 1)
+        self.vertices_BFS[raiz - 1] = 1
 
         while fila:
             v = fila.popleft()
             for i in self.lista[v]:
-                if i - 1 not in self.vertices_BFS:
+                if self.vertices_BFS[i-1] == 0:
                     pai[i - 1] = v + 1
                     nivel[i - 1] = nivel[v] + 1
-                    self.vertices_BFS.add(i - 1)
+                    self.vertices_BFS[i - 1] = 1
                     fila.append(i - 1)
 
         return pai, nivel
