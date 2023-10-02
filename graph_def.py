@@ -1,12 +1,12 @@
 import numpy as np
 import functools 
 import statistics 
-from time import time
+from time import time, sleep
 import random
 from collections import deque
 import gc
-
-with open("grafo_3.txt") as f:
+gc.enable()
+with open("grafo_6.txt") as f:
     mylist = f.read().splitlines() 
 links = []
 for i in range(1, len(mylist)):
@@ -15,69 +15,10 @@ for i in range(1, len(mylist)):
 number_vertices = int(mylist[0])
 print(number_vertices, len(links))
 
-
-
 class Grafo:
     def __init__(self, n, links):
         self.n = n
         self.links = links
-
-class Node:
-    def __init__(self, value):
-        self.value = value
-        self.next = None
- 
- 
-class Stack:
- 
-    # Initializing a stack.
-    # Use a dummy node, which is
-    # easier for handling edge cases.
-    def __init__(self):
-        self.head = Node("head")
-        self.size = 0
- 
-    # String representation of the stack
-    def __str__(self):
-        cur = self.head.next
-        out = ""
-        while cur:
-            out += str(cur.value) + "->"
-            cur = cur.next
-        return out[:-2]
- 
-    # Get the current size of the stack
-    def getSize(self):
-        return self.size
- 
-    # Check if the stack is empty
-    def isEmpty(self):
-        return self.size == 0
- 
-    # Get the top item of the stack
-    def peek(self):
- 
-        # Sanitary check to see if we
-        # are peeking an empty stack.
-        if self.isEmpty():
-            raise Exception("Peeking from an empty stack")
-        return self.head.next.value
- 
-    # Push a value into the stack.
-    def push(self, value):
-        node = Node(value)
-        node.next = self.head.next
-        self.head.next = node
-        self.size += 1
- 
-    # Remove a value from the stack and return.
-    def pop(self):
-        if self.isEmpty():
-            raise Exception("Popping from an empty stack")
-        remove = self.head.next
-        self.head.next = self.head.next.next
-        self.size -= 1
-        return remove.value
 
 class Matriz_Grafo(Grafo):
     def __init__(self, n, links):
@@ -111,15 +52,15 @@ class Matriz_Grafo(Grafo):
         nivel = [0] * self.n
         pai = [0] * self.n
         vertices = [0] * self.n
-        pilha = Stack()
-        pilha.push(raiz-1)
-        while not pilha.isEmpty:
+        pilha = deque()
+        pilha.append(raiz-1)
+        while len(pilha) !=0:
             u = pilha.pop()
             if vertices[u] == 0:
                 vertices[u] = 1
                 for i in range(self.n):
                     if self.matriz[u][i] == 1:
-                        pilha.push(i)
+                        pilha.append(i)
                         if vertices[i] == 0:
                             pai[i] = u + 1
                             nivel[i] = nivel[u] + 1
@@ -193,17 +134,17 @@ class Lista_Grafo(Grafo):
 
         return pai, nivel
     def DFS(self, raiz):
-        nivel = np.zeros(self.n, dtype = int)
-        pai = np.zeros(self.n, dtype = int)
-        vertices = np.zeros(self.n, dtype = int)
-        pilha = Stack()
-        pilha.push(raiz-1)
-        while pilha.isEmpty() == False:
+        nivel = [0] * self.n
+        pai = [0] * self.n
+        vertices = [0] * self.n
+        pilha = deque()
+        pilha.append(raiz-1)
+        while len(pilha) != 0:
             u = pilha.pop()
             if vertices[u] == 0:
                 vertices[u] = 1
                 for i in self.lista[u]:
-                    pilha.push(i-1)
+                    pilha.append(i-1)
                     if vertices[i-1] == 0:
                         pai[i-1] = u + 1
                         nivel[i-1] = nivel[u] + 1
@@ -257,12 +198,15 @@ class Lista_Grafo(Grafo):
 
 cachorrinho = Lista_Grafo(5, [[1,2], [2,5], [5,3], [4,5], [1,5]])
 #print(cachorrinho.componentes_conexos())
+
 cachorro = Lista_Grafo(number_vertices, links)
+#sleep(20)
 #print(cachorro.BFS(1))
 
 #a=[[1,2,3],[2],[1,2]]
 #b = np.array(cachorro.lista)
 #b = np.array(list(map(len, b)))
+"""
 media = functools.reduce(lambda a, c: a+c, b)//10000
 media = statistics.mean(b)
 mediana = statistics.median(np.sort(b))
@@ -280,15 +224,17 @@ g.write("Número de vértices: " + str(number_vertices) + "\n" +
         "Número de componentes conexas: " + str(tamanho) + "\n" +
         "Tamanho de cada componente: " + str(tamanho_de_cada_componente) + "\n" + 
         "Lista de vértices pertencentes à componente: " + str(vertices_conexos))
+"""
 tempos = []
-"""for i in range(100):
+for i in range(10):
     start_time = time()
     cachorro.DFS(random.randint(1, number_vertices))
     time_elapsed = time() - start_time
     tempos.append(time_elapsed)
 print(tempos)
-print(sum(tempos)/100)"""
+print(sum(tempos)/10)
 
-a = cachorro.diametro_aprox()
+a = cachorro.DFS(1)
 #print(cachorro.componentes_conexos()[2])
-print(a)
+print(a[0][9])
+gc.disable()
