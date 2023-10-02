@@ -37,14 +37,14 @@ class Matriz_Grafo(Grafo):
         pai = [0] * self.n
         self.verticesBFS = set()
         fila = deque([raiz-1])
-        self.verticesBFS.add(raiz-1)
+        self.verticesBFS[raiz-1] = 1
         while fila:
             v = fila.popleft()
             for i in range(self.n):
-                if self.matriz[v][i] == 1 and i not in self.verticesBFS:
+                if self.matriz[v][i] == 1 and self.verticesBFS[i] == 0:
                     pai[i] = v + 1
                     nivel[i] = nivel[v] + 1
-                    self.verticesBFS.add(i)
+                    self.verticesBFS[i] = 1
                     fila.append(i)
         return pai, nivel
     
