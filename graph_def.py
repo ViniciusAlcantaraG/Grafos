@@ -263,7 +263,7 @@ cachorro = Lista_Grafo(number_vertices, links)
 #a=[[1,2,3],[2],[1,2]]
 #b = np.array(cachorro.lista)
 #b = np.array(list(map(len, b)))
-"""media = functools.reduce(lambda a, c: a+c, b)//10000
+media = functools.reduce(lambda a, c: a+c, b)//10000
 media = statistics.mean(b)
 mediana = statistics.median(np.sort(b))
 tamanho = cachorro.componentes_conexos()[2]
@@ -279,7 +279,7 @@ g.write("Número de vértices: " + str(number_vertices) + "\n" +
         "Mediana de grau: " + str(int(mediana)) + "\n" +
         "Número de componentes conexas: " + str(tamanho) + "\n" +
         "Tamanho de cada componente: " + str(tamanho_de_cada_componente) + "\n" + 
-        "Lista de vértices pertencentes à componente: " + str(vertices_conexos))"""
+        "Lista de vértices pertencentes à componente: " + str(vertices_conexos))
 tempos = []
 """for i in range(100):
     start_time = time()
