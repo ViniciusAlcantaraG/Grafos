@@ -35,7 +35,7 @@ class Matriz_Grafo(Grafo):
     def BFS(self, raiz):
         nivel = [0] * self.n
         pai = [0] * self.n
-        self.verticesBFS = set()
+        self.verticesBFS = [0] * self.n
         fila = deque([raiz-1])
         self.verticesBFS[raiz-1] = 1
         while fila:
