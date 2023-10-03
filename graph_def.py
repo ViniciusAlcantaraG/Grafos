@@ -5,7 +5,11 @@ from time import time, sleep
 import random
 from collections import deque
 import gc
+
+# Ativação do garbage collector.
 gc.enable()
+
+# A leitura do arquivo texto ocorre fora das classes definidas.
 with open("grafo_6.txt") as f:
     mylist = f.read().splitlines() 
 links = []
@@ -13,16 +17,18 @@ for i in range(1, len(mylist)):
     a,b = mylist[i].split(" ")
     links.append([int(a),int(b)])
 number_vertices = int(mylist[0])
-print(number_vertices, len(links))
+# Definimos o número de vértices e o número de arestas.
 
 class Grafo:
     def __init__(self, n, links):
+        # Definimos n como o número de vértices e links como as arestas.
         self.n = n
         self.links = links
 
 class Matriz_Grafo(Grafo):
     def __init__(self, n, links):
         super().__init__(n, links)
+        # Utilizamos herança para a classe Matriz ter as mesmas características da classe Grafo.
         self.matriz = np.zeros((self.n, self.n), dtype = int) 
         for a, b in links:
             a -= 1
@@ -161,6 +167,8 @@ class Lista_Grafo(Grafo):
             diam = max(diam, nível_max)
         return diam
     def diametro_aprox(self):
+        # Nossa aproximação exige a definição de um número de amostras. Quanto maior o número,
+        # será a aproximação.
         distancias_max = []
         num_amostras = 1000
         diam = 0
@@ -172,6 +180,9 @@ class Lista_Grafo(Grafo):
         return diam
     
     def componentes_conexos(self):
+        # Realizamos uma BFS com raiz em 1. Caso algum vértice não tenha sido descoberto,
+        # executamos uma nova BFS com esse vértice como raiz. Assim, o número de BFS's
+        # será igual ao número de componentes conexas.
         tamanho = np.array([], dtype = int)
         Ver_BFS = [0 for i in range(self.n)]
         lista_vert = np.array([], dtype = int)
@@ -196,20 +207,20 @@ class Lista_Grafo(Grafo):
         return tamanho, lista_vert, len(tamanho)
 
 
-cachorrinho = Lista_Grafo(5, [[1,2], [2,5], [5,3], [4,5], [1,5]])
-
-cachorro = Lista_Grafo(number_vertices, links)
+arquivo = Lista_Grafo(number_vertices, links)
 
 b = np.array(cachorro.lista)
 b = np.array(list(map(len,b)))
 
-media = functools.reduce(lambda a, c: a+c, b)//10000
+# Definição de alguns valores que estarão presentes no arquivo de saída.
+media = functools.reduce(lambda a, c: a+c, b)//number_vertices
 media = statistics.mean(b)
 mediana = statistics.median(np.sort(b))
-tamanho = cachorro.componentes_conexos()[2]
-tamanho_de_cada_componente = cachorro.componentes_conexos()[0]
-vertices_conexos = cachorro.componentes_conexos()[1]
+tamanho = arquivo.componentes_conexos()[2]
+tamanho_de_cada_componente = arquivo.componentes_conexos()[0]
+vertices_conexos = arquivo.componentes_conexos()[1]
 
+# Arquivo de sáida
 g = open("saida.txt", "w")
 g.write("Número de vértices: " + str(number_vertices) + "\n" + 
         "Número de arestas: " + str(len(links)) + "\n" +
@@ -221,10 +232,11 @@ g.write("Número de vértices: " + str(number_vertices) + "\n" +
         "Tamanho de cada componente: " + str(tamanho_de_cada_componente) + "\n" + 
         "Lista de vértices pertencentes à componente: " + str(vertices_conexos))
 
+# Trecho do código responsável pela execução das 100 DFS's e BFS's
 tempos = []
 for i in range(100):
     start_time = time()
-    cachorro.DFS(random.randint(1, number_vertices))
+    arquivo.DFS(random.randint(1, number_vertices))
     time_elapsed = time() - start_time
     tempos.append(time_elapsed)
 print(tempos)
