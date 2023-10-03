@@ -1,5 +1,4 @@
 import numpy as np
-import functools 
 import statistics 
 from time import time, sleep
 import random
