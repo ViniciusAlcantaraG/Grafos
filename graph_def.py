@@ -197,16 +197,9 @@ class Lista_Grafo(Grafo):
 
 
 cachorrinho = Lista_Grafo(5, [[1,2], [2,5], [5,3], [4,5], [1,5]])
-#print(cachorrinho.componentes_conexos())
 
 cachorro = Lista_Grafo(number_vertices, links)
-#sleep(20)
-#print(cachorro.BFS(1))
 
-#a=[[1,2,3],[2],[1,2]]
-#b = np.array(cachorro.lista)
-#b = np.array(list(map(len, b)))
-"""
 media = functools.reduce(lambda a, c: a+c, b)//10000
 media = statistics.mean(b)
 mediana = statistics.median(np.sort(b))
@@ -224,17 +217,15 @@ g.write("Número de vértices: " + str(number_vertices) + "\n" +
         "Número de componentes conexas: " + str(tamanho) + "\n" +
         "Tamanho de cada componente: " + str(tamanho_de_cada_componente) + "\n" + 
         "Lista de vértices pertencentes à componente: " + str(vertices_conexos))
-"""
+
 tempos = []
-for i in range(10):
+for i in range(100):
     start_time = time()
     cachorro.DFS(random.randint(1, number_vertices))
     time_elapsed = time() - start_time
     tempos.append(time_elapsed)
 print(tempos)
-print(sum(tempos)/10)
+print(sum(tempos)/100)
 
-a = cachorro.DFS(1)
-#print(cachorro.componentes_conexos()[2])
-print(a[0][9])
+
 gc.disable()
