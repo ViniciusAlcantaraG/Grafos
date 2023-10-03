@@ -84,6 +84,9 @@ class Matriz_Grafo(Grafo):
         return int(distancias.max())
     
     def componentes_conexos(self):
+        # Realizamos uma BFS com raiz em 1. Caso algum vértice não tenha sido descoberto,
+        # executamos uma nova BFS com esse vértice como raiz. Assim, o número de BFS's
+        # será igual ao número de componentes conexas.
         tamanho = np.array([], dtype = int)
         Ver_BFS = [0 for i in range(self.n)]
         lista_vert = np.array([], dtype = int)
@@ -160,6 +163,7 @@ class Lista_Grafo(Grafo):
         return self.BFS(u)[1][v-1]
     
     def diametro(self):
+        # Realizamos uma BFS para cada vértice e estabelecemos a maior distância.
         diam = 0
         for i in range(1, self.n + 1):
             níveis = self.BFS(i)[1]
