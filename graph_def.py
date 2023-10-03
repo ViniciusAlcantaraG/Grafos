@@ -200,6 +200,9 @@ cachorrinho = Lista_Grafo(5, [[1,2], [2,5], [5,3], [4,5], [1,5]])
 
 cachorro = Lista_Grafo(number_vertices, links)
 
+b = np.array(cachorro.lista)
+b = np.array(list(map(len,b)))
+
 media = functools.reduce(lambda a, c: a+c, b)//10000
 media = statistics.mean(b)
 mediana = statistics.median(np.sort(b))
