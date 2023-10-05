@@ -212,7 +212,7 @@ class Lista_Grafo(Grafo):
 
 arquivo = Lista_Grafo(number_vertices, links)
 
-b = np.array(cachorro.lista)
+b = np.array(arquivo.lista)
 b = np.array(list(map(len,b)))
 
 # Definição de alguns valores que estarão presentes no arquivo de saída.
