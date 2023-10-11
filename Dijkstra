@@ -4,22 +4,24 @@ using namespace std;
 
 vector<float> Dijkstra(int number_vertices, int raiz, vector<vector<vector<float>>> vizinhos){
     vector<float> dist;
-    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> S;
+    priority_queue<pair<float,int>, vector<pair<float,int>>, greater<pair<float,int>>> S;
     for (int i = 0; i < number_vertices; i++){
         dist.push_back(numeric_limits<float>::infinity());
     }
     dist[raiz-1] = 0;
     S.push({0, raiz-1});
     while(!S.empty()){
+        int count = 0;
         int u = S.top().second;
         float dist_atual = S.top().first;
         S.pop();
         for (vector<float> i : vizinhos[u]){
-            if (dist[i[0]] > dist_atual + i[1]){
-                dist[i[0]] = dist_atual + i[1]; 
-                S.push({dist[i[0]], i[0]});
+            if (dist[i[0]-1] > dist_atual + i[1]){
+                dist[i[0]-1] = dist_atual + i[1]; 
+                S.push({dist[i[0]-1], i[0]-1});
             }
         }
+        count++;
     }
     return dist;
 }
