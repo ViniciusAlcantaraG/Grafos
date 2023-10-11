@@ -1,6 +1,28 @@
-#include <bits/stdc++.h>
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <limits>
+
 using namespace std;
 
+class Grafos{
+    public: 
+        int number_vertices;
+        vector<vector<vector<float>>> links;
+        Grafos(int n, vector<vector<vector<float>>> conexoes){
+            number_vertices = n;
+            links = conexoes;
+        }
+    void vizinhos(string tipo){
+        vector<vector<vector<float>>> vizinhos;
+        if (tipo == "Vetor"){
+            for (vector<vector<float>> i : links){
+                vizinhos[i[0]] = {i[1], i[2]};
+
+            }
+        }
+    }
+};
 
 vector<float> Dijkstra(int number_vertices, int raiz, vector<vector<vector<float>>> vizinhos){
     vector<float> dist;
@@ -11,7 +33,6 @@ vector<float> Dijkstra(int number_vertices, int raiz, vector<vector<vector<float
     dist[raiz-1] = 0;
     S.push({0, raiz-1});
     while(!S.empty()){
-        int count = 0;
         int u = S.top().second;
         float dist_atual = S.top().first;
         S.pop();
@@ -21,7 +42,6 @@ vector<float> Dijkstra(int number_vertices, int raiz, vector<vector<vector<float
                 S.push({dist[i[0]-1], i[0]-1});
             }
         }
-        count++;
     }
     return dist;
 }
