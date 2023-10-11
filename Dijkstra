@@ -1,0 +1,33 @@
+#include <bits/stdc++.h>
+using namespace std;
+
+
+vector<float> Dijkstra(int number_vertices, int raiz, vector<vector<vector<float>>> vizinhos){
+    vector<float> dist;
+    priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> S;
+    for (int i = 0; i < number_vertices; i++){
+        dist.push_back(numeric_limits<float>::infinity());
+    }
+    dist[raiz-1] = 0;
+    S.push({0, raiz-1});
+    while(!S.empty()){
+        int u = S.top().second;
+        float dist_atual = S.top().first;
+        S.pop();
+        for (vector<float> i : vizinhos[u]){
+            if (dist[i[0]] > dist_atual + i[1]){
+                dist[i[0]] = dist_atual + i[1]; 
+                S.push({dist[i[0]], i[0]});
+            }
+        }
+    }
+    return dist;
+}
+
+int main(){
+    vector<float> printar = Dijkstra(5, 1, {{{2, 0.1}, {5, 1}},{{1, 0.1}, {5, 0.2}}, {{4, 0}, {5, 5}}, {{3, 0}, {5, 2.3}}, {{1, 1}, {2, 0.2}, {3, 5}, {4, 2.3}}});
+    for (int i = 0; i<5; i++){
+        cout << printar[i] << "\n";
+    }
+    return 0;
+}
