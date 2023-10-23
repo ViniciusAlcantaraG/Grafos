@@ -50,3 +50,6 @@ Grafo 3
 Grafo 4
 
 29.17051356077194
+
+## Trabalho prático 2
+# Distâncias ao vértice 10:
