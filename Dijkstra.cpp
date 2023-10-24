@@ -61,11 +61,13 @@ class Grafo_vetor: public Grafos {
         return retornar;
     }
 
-    vector<float> Dijkstra_2(float raiz){
+    vector<vector<float>> Dijkstra_2(float raiz){
         vector<float> dist;
+        vector<float> pai;
         vector<vector<float>> S;
         for (int i = 0; i < number_vertices; i++){
             dist.push_back(numeric_limits<float>::infinity());
+            pai.push_back(0);
         }
         dist[raiz-1] = 0;
         S.push_back({0, raiz-1});
@@ -85,10 +87,15 @@ class Grafo_vetor: public Grafos {
                 if (dist[i[0]] > dist_atual + i[1]){
                     dist[i[0]] = dist_atual + i[1]; 
                     S.push_back({dist[i[0]], i[0]});
+                    pai[i[0]] = u+1;
                 }
             }
         }
-        return dist;
+        pai[raiz-1] = raiz;
+        vector<vector<float>> retornar;
+        retornar.push_back(dist);
+        retornar.push_back(pai);
+        return retornar;
     }
 };
 
@@ -107,13 +114,20 @@ int main(){
         istringstream iss(linha);
         float v1, v2, peso;
         if (iss >> v1 >> v2 >> peso){
+            if (peso < 0){
+                cout << "Peso Negativo";
+                return 0;
+            }
             grafo.push_back({v1,v2,peso});
         }
     }
     
     Grafo_vetor cachorrinho(numeroDeVertices, grafo);
-    vector<float> pais = cachorrinho.Dijkstra(10)[1];
-    vector<float> blac = cachorrinho.Dijkstra(10)[0];
+    vector<vector<float>> temporary = cachorrinho.Dijkstra(10);
+    vector<float> pais;
+    vector<float> blac;
+    pais = temporary[1];
+    blac = temporary[0];
     vector<float> distancias;
     distancias.push_back(blac[19]);
     distancias.push_back(blac[29]);
@@ -129,14 +143,15 @@ int main(){
     Grafo_vetor cachorro(5, {{1,2,0.1},{2,5,0.2},{5,3,5},{3,4,0},{4,5,2.3},{1,5,1}});
     vector<float> bla = cachorro.Dijkstra(1)[1];
     vector<vector<int>> caminho;
-    for (int i = 0; i < numeroDeVertices; i++){
-        cout << "oi" << endl;
+    for (int i:{19,29,39,49,59}){
+        //cout << "oi" << endl;
         int k = pais[i];
-        cout << k << endl;
+        //cout << k << endl;
         vector<int> atual = {};
         atual.push_back(k);
         while(k!=10){
-            k = bla[k-1];
+            //cout << "entrou";
+            k = pais[k-1];
             atual.push_back(k);
             //cout << "entrou " << k << endl;
         }
@@ -148,12 +163,12 @@ int main(){
         }
         cout << endl;
     }
-    for (int j: {19,29,39,49,59}){
-        for (int i:caminho[j]){
-            cout << i << " ";
-        }
-        cout << endl;
-    }
+    //for (int j: {19,29,39,49,59}){
+        //for (int i:caminho[j]){
+            //cout << i << " ";
+        //}
+        //cout << endl;
+    //}
     
     return 0;
 }
