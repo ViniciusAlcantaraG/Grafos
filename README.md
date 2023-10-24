@@ -180,13 +180,13 @@ Grafo 5:
 
 Grafo 1
 
-Heap: 0.057
+Heap: 0.014
 
 Vetor: 0.9785
 
 Grafo 2
 
-Heap: 0.272
+Heap: 0.068
 
 Vetor: 7.38413
 
