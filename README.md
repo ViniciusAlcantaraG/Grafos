@@ -192,6 +192,6 @@ Vetor: 7.38413
 
 Grafo 3
 
-Heap: 2.136
+Heap: 0.591
 
 Vetor: 209.279
