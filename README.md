@@ -176,3 +176,22 @@ Grafo 5:
 
 60:
 
+## Tempos de execução
+
+Grafo 1
+
+Heap: 0.14865
+
+Vetor: 0.9785
+
+Grafo 2
+
+Heap: 0.85433
+
+Vetor: 7.38413
+
+Grafo 3
+
+Heap: 9.20808
+
+Vetor: 
