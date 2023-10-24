@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include <time.h>
 using namespace std;
 
 
@@ -32,33 +33,29 @@ class Grafo_vetor: public Grafos {
             }
         }
     
-    vector<vector<float>> Dijkstra(int raiz){
-        vector<float> dist;
-        vector<float> pai;
+    pair<vector<float>, vector<int>> Dijkstra(int raiz){
+        vector<float> dist(number_vertices, numeric_limits<float>::infinity());
+        vector<int> pai(number_vertices, -1);
+        vector<int> visitado(number_vertices, 0);
         priority_queue<pair<float,int>, vector<pair<float,int>>, greater<pair<float,int>>> S;
-        for (int i = 0; i < number_vertices; i++){
-            dist.push_back(numeric_limits<float>::infinity());
-            pai.push_back(0);
-        }
         dist[raiz-1] = 0;
         S.push({0, raiz-1});
         while(!S.empty()){
             int u = S.top().second;
             float dist_atual = S.top().first;
+            visitado[u] = 1;
             S.pop();
             for (vector<float> i : vetor[u]){
-                if (dist[i[0]] > dist_atual + i[1]){
-                    dist[i[0]] = dist_atual + i[1]; 
-                    S.push({dist[i[0]], i[0]});
-                    pai[i[0]] = u+1;
+                if (visitado[i[0]] == 0){
+                    if (dist[i[0]] > dist_atual + i[1]){
+                        dist[i[0]] = dist_atual + i[1]; 
+                        S.push({dist[i[0]], i[0]});
+                        pai[i[0]] = u+1;
+                    }
                 }
             }
         }
-        pai[raiz-1] = raiz;
-        vector<vector<float>> retornar;
-        retornar.push_back(dist);
-        retornar.push_back(pai);
-        return retornar;
+        return make_pair(dist, pai);
     }
 
     vector<vector<float>> Dijkstra_2(float raiz){
@@ -103,7 +100,7 @@ int main(){
     ifstream archive;
     string myText;
     int numeroDeVertices;
-    ifstream arquivo("grafo_W_1.txt");
+    ifstream arquivo("grafo_W_4.txt");
     // Variável para armazenar cada linha do arquivo
     string linha;
     vector<vector<float>> grafo;    
@@ -123,11 +120,25 @@ int main(){
     }
     
     Grafo_vetor cachorrinho(numeroDeVertices, grafo);
-    vector<vector<float>> temporary = cachorrinho.Dijkstra(10);
-    vector<float> pais;
+    //float soma=0;
+    //for (int i = 0; i<10;i++){
+        //clock_t t0 = clock();
+        //cachorrinho.Dijkstra(100);
+        //clock_t tf = clock();
+        //double time_spent = (double)(tf - t0) / CLOCKS_PER_SEC;
+        //printf("t=%f ", time_spent);
+        //soma+=time_spent;
+    //}
+    //cout << soma/10 << endl; 
+    clock_t t0 = clock();
+    pair<vector<float>, vector<int>> temporary = cachorrinho.Dijkstra(10);
+    clock_t tf = clock();
+    double time_spent = (double)(tf - t0) / CLOCKS_PER_SEC;
+    cout << "tempo " << time_spent << endl;
+    vector<int> pais;
     vector<float> blac;
-    pais = temporary[1];
-    blac = temporary[0];
+    pais = temporary.second;
+    blac = temporary.first;
     vector<float> distancias;
     distancias.push_back(blac[19]);
     distancias.push_back(blac[29]);
@@ -141,7 +152,7 @@ int main(){
     //    cout << printar[i] << "\n";
     //}
     Grafo_vetor cachorro(5, {{1,2,0.1},{2,5,0.2},{5,3,5},{3,4,0},{4,5,2.3},{1,5,1}});
-    vector<float> bla = cachorro.Dijkstra(1)[1];
+    vector<int> bla = cachorro.Dijkstra(1).second;
     vector<vector<int>> caminho;
     for (int i:{19,29,39,49,59}){
         //cout << "oi" << endl;
