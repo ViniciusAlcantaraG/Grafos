@@ -194,4 +194,4 @@ Grafo 3
 
 Heap: 9.20808
 
-Vetor: 
+Vetor: 209.279
