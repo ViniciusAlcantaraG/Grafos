@@ -33,19 +33,11 @@ class Grafo_vetor: public Grafos {
     public:
         vector<vector<pair<int, float>>> vetor; 
         Grafo_vetor(int n, vector<Edge> conexoes) : Grafos(n, conexoes){
-            //for (int i = 0; i < number_vertices; i++) {
-                //vetor.push_back({});  // Create an empty vector for each vertex
-            //}
             vetor.resize(n);
             for (const Edge& edge : links) {
-                // Access the members of the Edge struct directly
                 vetor[edge.v1 - 1].push_back({edge.v2 - 1, edge.peso});
                 vetor[edge.v2 - 1].push_back({edge.v1 - 1, edge.peso});
             }
-            //for (vector<float> i : links) {
-                //vetor[i[0]-1].push_back({i[1]-1, i[2]});
-                //vetor[i[1]-1].push_back({i[0]-1, i[2]});
-            //}
         }
     
     pair<vector<float>, vector<int>> Dijkstra(int raiz){
@@ -141,16 +133,7 @@ int main(){
     arquivo.close();
     cout << "Avarakecobra" << endl;
     Grafo_vetor cachorrinho(numeroDeVertices, grafo);
-    //float soma=0;
-    //for (int i = 0; i<10;i++){
-        //clock_t t0 = clock();
-        //cachorrinho.Dijkstra(100);
-        //clock_t tf = clock();
-        //double time_spent = (double)(tf - t0) / CLOCKS_PER_SEC;
-        //printf("t=%f ", time_spent);
-        //soma+=time_spent;
-    //}
-    //cout << soma/10 << endl; 
+
     clock_t t0 = clock();
     cout << "Lamentável" << endl;
     pair<vector<float>, vector<int>> temporary = cachorrinho.Dijkstra_2(10);
@@ -162,6 +145,7 @@ int main(){
     pais = temporary.second;
     blac = temporary.first;
     vector<float> distancias;
+    
     distancias.push_back(blac[19]);
     distancias.push_back(blac[29]);
     distancias.push_back(blac[39]);
@@ -170,30 +154,6 @@ int main(){
     for (float i: distancias){
         cout << i << endl;
     }
-    //for (int i = 0; i<5; i++){
-    //    cout << printar[i] << "\n";
-    //}
-
-    //ifstream file("rede_colaboracao_vertices.txt");
-    //std::string line;
-    //std::vector<std::pair<int, std::string>> data;
-    //while (std::getline(file, line)) {
-        // Split the line by comma
-        //size_t commaPos = line.find(",");
-       // if (commaPos != std::string::npos) {
-            //int id = std::stoi(line.substr(0, commaPos));
-            //std::string name = line.substr(commaPos + 1);
-            //data.emplace_back(id, name);
-        //} else {
-            //std::cerr << "Invalid line format: " << line << std::endl;
-        //}
-    //}
-    //vector<int> lista;
-    //int inicio;
-    //for (int i = 0; i < 722385; i++){
-
-    //}
-
 
 
     Grafo_vetor cachorro(5, {{1,2,0.1},{2,5,0.2},{5,3,5},{3,4,0},{4,5,2.3},{1,5,1}});
@@ -219,12 +179,7 @@ int main(){
         }
         cout << endl;
     }
-    //for (int j: {19,29,39,49,59}){
-        //for (int i:caminho[j]){
-            //cout << i << " ";
-        //}
-        //cout << endl;
-    //}
+
     
     return 0;
 }
