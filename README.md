@@ -200,7 +200,7 @@ Grafo 4
 
 Heap: 2.193
 
-Vetor: 
+Vetor: 19823.1
 
 Grafo 5
 
