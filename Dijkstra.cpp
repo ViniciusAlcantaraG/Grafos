@@ -8,12 +8,21 @@
 #include <time.h>
 using namespace std;
 
+struct Edge {
+    float v1;
+    float v2;
+    float peso;
+
+    Edge(float vertex1, float vertex2, float weight) : v1(vertex1), v2(vertex2), peso(weight) {}
+};
+
+
 
 class Grafos{
     public: 
         int number_vertices;
-        vector<vector<float>> links;
-        Grafos(int n, vector<vector<float>> conexoes){
+        vector<Edge> links;
+        Grafos(int n, vector<Edge> conexoes){
             number_vertices = n;
             links = conexoes;
         }
@@ -22,15 +31,21 @@ class Grafos{
 
 class Grafo_vetor: public Grafos {
     public:
-        vector<vector<vector<float>>> vetor;
-        Grafo_vetor(int n, vector<vector<float>> conexoes) : Grafos(n, conexoes){
-            for (int i = 0; i < number_vertices; i++) {
-                vetor.push_back({});  // Create an empty vector for each vertex
+        vector<vector<pair<int, float>>> vetor; 
+        Grafo_vetor(int n, vector<Edge> conexoes) : Grafos(n, conexoes){
+            //for (int i = 0; i < number_vertices; i++) {
+                //vetor.push_back({});  // Create an empty vector for each vertex
+            //}
+            vetor.resize(n);
+            for (const Edge& edge : links) {
+                // Access the members of the Edge struct directly
+                vetor[edge.v1 - 1].push_back({edge.v2 - 1, edge.peso});
+                vetor[edge.v2 - 1].push_back({edge.v1 - 1, edge.peso});
             }
-            for (vector<float> i : links) {
-                vetor[i[0]-1].push_back({i[1]-1, i[2]});
-                vetor[i[1]-1].push_back({i[0]-1, i[2]});
-            }
+            //for (vector<float> i : links) {
+                //vetor[i[0]-1].push_back({i[1]-1, i[2]});
+                //vetor[i[1]-1].push_back({i[0]-1, i[2]});
+            //}
         }
     
     pair<vector<float>, vector<int>> Dijkstra(int raiz){
@@ -45,33 +60,36 @@ class Grafo_vetor: public Grafos {
             float dist_atual = S.top().first;
             visitado[u] = 1;
             S.pop();
-            for (vector<float> i : vetor[u]){
-                if (visitado[i[0]] == 0){
-                    if (dist[i[0]] > dist_atual + i[1]){
-                        dist[i[0]] = dist_atual + i[1]; 
-                        S.push({dist[i[0]], i[0]});
-                        pai[i[0]] = u+1;
+            if (dist_atual > dist[u]) continue;
+
+            for (pair<int, float>& edge : vetor[u]){
+                int neighbor = edge.first;
+                float weight = edge.second;
+                if (visitado[neighbor] == 0){
+                    if (dist[neighbor] > dist_atual + weight){
+                        dist[neighbor] = dist_atual + weight; 
+                        S.push({dist[neighbor], neighbor});
+                        pai[neighbor] = u+1;
                     }
                 }
+                //cout << "Estou aqui" << endl;
             }
         }
         return make_pair(dist, pai);
     }
 
-    vector<vector<float>> Dijkstra_2(float raiz){
-        vector<float> dist;
-        vector<float> pai;
+    pair<vector<float>, vector<int>> Dijkstra_2(float raiz){
+        vector<float> dist(number_vertices, numeric_limits<float>::infinity());
+        vector<int> pai(number_vertices, -1);
         vector<vector<float>> S;
-        for (int i = 0; i < number_vertices; i++){
-            dist.push_back(numeric_limits<float>::infinity());
-            pai.push_back(0);
-        }
+        vector<int> visitado(number_vertices, 0);
         dist[raiz-1] = 0;
         S.push_back({0, raiz-1});
         while(!S.empty()){
             int u = 0;
             float dist_atual = numeric_limits<float>::infinity();
             int k = 0;
+            visitado[u] = 1;
             for (int i = 0; i < S.size(); i++){
                 if (S[i][0] < dist_atual){
                     dist_atual = S[i][0];
@@ -80,19 +98,21 @@ class Grafo_vetor: public Grafos {
                 }
             }
             S.erase(S.begin() + k);
-            for (vector<float> i : vetor[u]){
-                if (dist[i[0]] > dist_atual + i[1]){
-                    dist[i[0]] = dist_atual + i[1]; 
-                    S.push_back({dist[i[0]], i[0]});
-                    pai[i[0]] = u+1;
+            for (pair<int, float>& edge : vetor[u]){
+                int neighbor = edge.first;
+                float weight = edge.second;
+                if (visitado[neighbor] == 0){
+                    if (dist[neighbor] > dist_atual + weight){
+                        dist[neighbor] = dist_atual + weight; 
+                        S.push_back({dist[neighbor], (float)neighbor});
+                        pai[neighbor] = u+1;
+                    }
                 }
+                //cout << "Estou aqui" << endl;
             }
         }
         pai[raiz-1] = raiz;
-        vector<vector<float>> retornar;
-        retornar.push_back(dist);
-        retornar.push_back(pai);
-        return retornar;
+        return make_pair(dist, pai);
     }
 };
 
@@ -103,7 +123,7 @@ int main(){
     ifstream arquivo("grafo_W_4.txt");
     // Variável para armazenar cada linha do arquivo
     string linha;
-    vector<vector<float>> grafo;    
+    vector<Edge> grafo;    
     // Lê o numero de vertices na primeira linha do arquivo
     getline(arquivo, linha);
     numeroDeVertices = stoi(linha);
@@ -118,7 +138,8 @@ int main(){
             grafo.push_back({v1,v2,peso});
         }
     }
-    
+    arquivo.close();
+    cout << "Avarakecobra" << endl;
     Grafo_vetor cachorrinho(numeroDeVertices, grafo);
     //float soma=0;
     //for (int i = 0; i<10;i++){
@@ -131,7 +152,8 @@ int main(){
     //}
     //cout << soma/10 << endl; 
     clock_t t0 = clock();
-    pair<vector<float>, vector<int>> temporary = cachorrinho.Dijkstra(10);
+    cout << "Lamentável" << endl;
+    pair<vector<float>, vector<int>> temporary = cachorrinho.Dijkstra_2(10);
     clock_t tf = clock();
     double time_spent = (double)(tf - t0) / CLOCKS_PER_SEC;
     cout << "tempo " << time_spent << endl;
@@ -151,10 +173,33 @@ int main(){
     //for (int i = 0; i<5; i++){
     //    cout << printar[i] << "\n";
     //}
+
+    //ifstream file("rede_colaboracao_vertices.txt");
+    //std::string line;
+    //std::vector<std::pair<int, std::string>> data;
+    //while (std::getline(file, line)) {
+        // Split the line by comma
+        //size_t commaPos = line.find(",");
+       // if (commaPos != std::string::npos) {
+            //int id = std::stoi(line.substr(0, commaPos));
+            //std::string name = line.substr(commaPos + 1);
+            //data.emplace_back(id, name);
+        //} else {
+            //std::cerr << "Invalid line format: " << line << std::endl;
+        //}
+    //}
+    //vector<int> lista;
+    //int inicio;
+    //for (int i = 0; i < 722385; i++){
+
+    //}
+
+
+
     Grafo_vetor cachorro(5, {{1,2,0.1},{2,5,0.2},{5,3,5},{3,4,0},{4,5,2.3},{1,5,1}});
     vector<int> bla = cachorro.Dijkstra(1).second;
     vector<vector<int>> caminho;
-    for (int i:{19,29,39,49,59}){
+    for (const int& i : {19,29,39,49,59}){
         //cout << "oi" << endl;
         int k = pais[i];
         //cout << k << endl;
@@ -168,7 +213,7 @@ int main(){
         }
         caminho.push_back(atual);
     }
-    for (vector<int> i : caminho){
+    for (const vector<int>& i : caminho){
         for (int j: i){
             cout << j << " ";
         }
