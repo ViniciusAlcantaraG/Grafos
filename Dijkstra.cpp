@@ -109,8 +109,6 @@ class Grafo_vetor: public Grafos {
 };
 
 int main(){
-    ifstream archive;
-    string myText;
     int numeroDeVertices;
     ifstream arquivo("grafo_W_4.txt");
     // Variável para armazenar cada linha do arquivo
@@ -131,7 +129,6 @@ int main(){
         }
     }
     arquivo.close();
-    cout << "Avarakecobra" << endl;
     Grafo_vetor cachorrinho(numeroDeVertices, grafo);
 
     clock_t t0 = clock();
