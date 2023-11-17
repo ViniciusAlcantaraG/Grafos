@@ -192,7 +192,7 @@ int main() {
     ifstream archive;
     string myText;
     int numeroDeVertices;
-    ifstream arquivo("grafo_rf_1.txt");
+    ifstream arquivo("grafo_rf_6.txt");
     // Variável para armazenar cada linha do arquivo
     string linha;
     vector<Edge> conexoes;
@@ -211,7 +211,7 @@ int main() {
         }
     }
     arquivo.close();
-    bool direcionado = true;
+    bool direcionado = false;
     Grafos grafo(numeroDeVertices, conexoes, direcionado);
     // Exemplo de uso
     //int num_vertices = 7;
@@ -226,15 +226,23 @@ int main() {
 
     int origem = 0;
     int destino = 1;
-    clock_t t0 = clock();
-    cout << "Lamentável" << endl;
-    float maxFlow = fordFulkerson(grafo, origem, destino);
-    clock_t tf = clock();
-    double time_spent = (double)(tf - t0) / CLOCKS_PER_SEC;
-    cout << "tempo " << time_spent << endl;
+    double total = 0;
+    float maxFlow;
+    for (int i = 0; i < 5; i++){
+        clock_t t0 = clock();
+        //cout << "Lamentável" << endl;
+        maxFlow = fordFulkerson(grafo, origem, destino);
+        clock_t tf = clock();
+        double time_spent = (double)(tf - t0) / CLOCKS_PER_SEC;
+        total+=time_spent;
+        
+        
+    }
+    cout << "Fluxo Máximo: " << maxFlow << endl;
+    cout << "tempo " << total/5 << endl;
     //float maxFlow = fordFulkerson(grafo, origem, destino);
 
-    cout << "Fluxo Máximo: " << maxFlow << endl;
+    
 
     return 0;
 }
