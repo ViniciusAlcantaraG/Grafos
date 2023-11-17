@@ -220,3 +220,82 @@ Jon M. Kleinberg: 2.70699 | Edsger W. Dijkstra -> A. J. M. van Gasteren -> Gerar
 
 Daniel R. Figueiredo: 2.94283 | Edsger W. Dijkstra -> John R. Rice -> Dan C. Marinescu -> Chuang Lin -> Bo Li -> Y. Thomas Hou -> Zhi-Li Zhang -> Donald F. Towsley -> Daniel R. Figueiredo
 
+
+# Trabalho prático 3
+
+## Tempos de execução
+
+Grafo 1 
+
+Direcionado: 0.0665
+
+Não-Direcionado: 0.0806
+
+Grafo 2
+
+Direcionado: 0.1562
+
+Não-Direcionado: 0.1556
+
+Grafo 3
+
+Direcionado: 
+
+Não-Direcionado: 
+
+Grafo 4
+
+Direcionado: 
+
+Não-Direcionado:
+
+Grafo 5
+
+Direcionado: 
+
+Não-Direcionado:
+
+Grafo 6
+
+Direcionado: 
+
+Não-Direcionado:
+
+## Fluxo máximo
+
+Grafo 1
+
+Direcionado: 1058
+
+Não-Direcionado: 1058
+
+Grafo 2
+
+Direcionado: 11189
+
+Não-Direcionado: 11189
+
+Grafo 3
+
+Direcionado: 
+
+Não-Direcionado: 
+
+Grafo 4
+
+Direcionado: 
+
+Não-Direcionado: 
+
+Grafo 5
+
+Direcionado: 
+
+Não-Direcionado: 
+
+Grafo 6
+
+Direcionado: 
+
+Não-Direcionado: 
+
