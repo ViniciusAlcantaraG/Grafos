@@ -239,27 +239,27 @@ Não-Direcionado: 0.1556
 
 Grafo 3
 
-Direcionado: 
+Direcionado: 0.3523
 
-Não-Direcionado: 
+Não-Direcionado: 0.501
 
 Grafo 4
 
-Direcionado: 
+Direcionado: 13.7754
 
-Não-Direcionado:
+Não-Direcionado: 12.4508
 
 Grafo 5
 
-Direcionado: 
+Direcionado: 27.563
 
-Não-Direcionado:
+Não-Direcionado: 27.9745
 
 Grafo 6
 
-Direcionado: 
+Direcionado: 21.5195
 
-Não-Direcionado:
+Não-Direcionado: 36.6146
 
 ## Fluxo máximo
 
@@ -277,25 +277,25 @@ Não-Direcionado: 11189
 
 Grafo 3
 
-Direcionado: 
+Direcionado: 2964
 
-Não-Direcionado: 
+Não-Direcionado: 2964
 
 Grafo 4
 
-Direcionado: 
+Direcionado: 13486
 
-Não-Direcionado: 
+Não-Direcionado: 13486
 
 Grafo 5
 
-Direcionado: 
+Direcionado: 26360
 
-Não-Direcionado: 
+Não-Direcionado: 26446
 
 Grafo 6
 
-Direcionado: 
+Direcionado: 26812
 
-Não-Direcionado: 
+Não-Direcionado: 26812
 
